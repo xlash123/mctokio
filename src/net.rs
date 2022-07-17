@@ -55,11 +55,11 @@ impl TcpConnection {
         self.reader.read_packet().await
     }
 
-    pub async fn write_packet<P>(&mut self, packet: P) -> anyhow::Result<()> where P: Packet {
+    pub async fn write_packet<P>(&mut self, packet: &P) -> anyhow::Result<()> where P: Packet {
         self.writer.write_packet(packet).await
     }
 
-    pub async fn write_raw_packet<'a, P>(&mut self, packet: P) -> anyhow::Result<()> where P: RawPacket<'a> {
+    pub async fn write_raw_packet<'a, P>(&mut self, packet: &P) -> anyhow::Result<()> where P: RawPacket<'a> {
         self.writer.write_raw_packet(packet).await
     }
 }

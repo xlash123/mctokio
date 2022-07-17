@@ -36,7 +36,7 @@ impl<W> WriteBridge<W> where W: AsyncWrite + Unpin {
         }
     }
 
-    pub async fn write_raw_packet<'a, P>(&mut self, packet: P) -> Result<()> where P: RawPacket<'a> {
+    pub async fn write_raw_packet<'a, P>(&mut self, packet: &P) -> Result<()> where P: RawPacket<'a> {
         let raw_buf = init_buf(&mut self.raw_buf, 512);
         let start_at = EXTRA_FREE_SPACE;
         let data = packet.data();
@@ -47,7 +47,7 @@ impl<W> WriteBridge<W> where W: AsyncWrite + Unpin {
         self.write_packet_in_buf(packet.id(), EXTRA_FREE_SPACE, body_len).await
     }
 
-    pub async fn write_packet<P>(&mut self, packet: P) -> Result<()> where P: Packet {
+    pub async fn write_packet<P>(&mut self, packet: &P) -> Result<()> where P: Packet {
         let len = {
             let mut serializer = GrowVecSerializer {
                 buf: init_buf(&mut self.raw_buf, 512),
